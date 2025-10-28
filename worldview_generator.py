@@ -299,7 +299,7 @@ class WorldviewGenerator:
         )
         # 评审用 Weak（更省），若对质量有高要求可切回 Strong
         review = self.call_structured_json(
-            model=self.WEAK_TEXT_MODEL,
+            model=self.STRONG_TEXT_MODEL,
             system_prompt=self.VALIDATOR_SYSTEM,
             user_prompt=up,
             json_schema=review_schema,
@@ -310,7 +310,7 @@ class WorldviewGenerator:
     def assemble_final(self, meta: Dict[str, Any], expansion: Dict[str, Any]) -> Dict[str, Any]:
         final_obj = {**meta, "expansion": expansion}
         _ = self.call_structured_json(
-            model=self.STRONG_TEXT_MODEL,  # 最终结构校验用强模型更稳
+            model=self.WEAK_TEXT_MODEL,  # 最终结构校验用强模型更稳
             system_prompt="请把以下 JSON 原样返回（用于 Final Schema 校验）。",
             user_prompt=json.dumps(final_obj, ensure_ascii=False),
             json_schema=self.FINAL_SCHEMA,

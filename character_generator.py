@@ -339,7 +339,7 @@ class CharacterGenerator:
     def review_and_revise(self, draft_characters: Dict[str, Any]) -> Dict[str, Any]:
         uprompt = self._build_review_user_prompt(draft_characters)
         review = self._call_structured_json(
-            model=self.STRONG_TEXT_MODEL,          # 评审用弱模型（可按需改为强模型）
+            model=self.STRONG_TEXT_MODEL,
             system_prompt=self.REVIEW_SYSTEM,
             user_prompt=uprompt,
             json_schema=self.REVIEW_SCHEMA,
@@ -348,7 +348,7 @@ class CharacterGenerator:
         return review
 
     def final_schema_check(self, characters: Dict[str, Any]) -> Dict[str, Any]:
-        # 用强模型做一次结构校验（原样返回）
+        # 做一次结构校验（原样返回）
         checked = self._call_structured_json(
             model=self.WEAK_TEXT_MODEL,
             system_prompt="请把以下 JSON 原样返回（用于角色集合 Schema 校验）。",

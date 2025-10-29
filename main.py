@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from worldview_generator import WorldviewGenerator
 from character_generator import CharacterGenerator
+from conflict_generator import ConflictGenerator
+
 
 def check_and_continue(file_path: Path) -> bool:
     """检查文件是否存在，若存在则跳过生成流程"""
@@ -56,7 +58,6 @@ if __name__ == "__main__":
 
     # 生成角色设定
     characters_path = output_dir / "characters.json"
-
     # 检查角色设定文件是否已存在,若存在则跳过生成流程
     if check_and_continue(characters_path):
         # 读取 Final Worldview
@@ -75,3 +76,25 @@ if __name__ == "__main__":
             json.dump(char_result, f, ensure_ascii=False, indent=2)
 
         print(f"Characters saved to: {characters_path}")
+
+    # 生成矛盾网络
+    conflicts_path = output_dir / "conflicts.json"
+    if check_and_continue(conflicts_path):
+        # 读取
+        with open(worldview_path, "r", encoding="utf-8") as f:
+            worldview_payload = json.load(f)
+        final_worldview = worldview_payload.get("final_worldview", worldview_payload)
+
+        with open(characters_path, "r", encoding="utf-8") as f:
+            characters_payload = json.load(f)
+        final_characters = characters_payload.get("final_characters", characters_payload)
+
+        # 生成矛盾网络
+        conf_gen = ConflictGenerator(env_path=env_path, worldview=final_worldview, characters=final_characters,
+                                     seed=seed)
+        conf_result = conf_gen.run()
+
+        # 保存
+        with conflicts_path.open("w", encoding="utf-8") as f:
+            json.dump(conf_result, f, ensure_ascii=False, indent=2)
+        print(f"Conflicts saved to: {conflicts_path}")

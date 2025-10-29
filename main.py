@@ -30,7 +30,7 @@ if __name__ == "__main__":
     seed = 20251029
 
     # 定义输出路径
-    task_name = "example_task_2"  # 可根据需要修改任务名
+    task_name = "example_task_3"  # 可根据需要修改任务名
     output_dir = Path(f"output/{task_name}")
     output_dir.mkdir(parents=True, exist_ok=True)
 

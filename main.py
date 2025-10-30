@@ -25,12 +25,12 @@ if __name__ == "__main__":
         "language": "中文",
     }
 
-    # 配置环境变量路径和随机种子
+    # 配置环境变量路径
     env_path = ".env"
-    seed = 20251029
+
 
     # 定义输出路径
-    task_name = "example_task_3"  # 可根据需要修改任务名
+    task_name = "example_task_4"  # 可根据需要修改任务名
     output_dir = Path(f"output/{task_name}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # 检查文件是否已存在,若存在则跳过生成流程
     if check_and_continue(worldview_path):
         # 创建 WorldviewGenerator 实例
-        worldview_generator = WorldviewGenerator(example_meta, env_path, seed)
+        worldview_generator = WorldviewGenerator(example_meta, env_path)
 
         # 执行生成流程
         result = worldview_generator.run()
@@ -72,7 +72,6 @@ if __name__ == "__main__":
 
         # 生成角色
         char_gen = CharacterGenerator(env_path=env_path
-                                      ,seed=seed
                                       ,worldview=final_worldview
                                       ,meta=example_meta)
         char_result = char_gen.run()
@@ -90,8 +89,7 @@ if __name__ == "__main__":
     if check_and_continue(conflicts_path):
 
         # 生成矛盾网络
-        conf_gen = ConflictGenerator(env_path=env_path, worldview=final_worldview, characters=final_characters,
-                                     seed=seed)
+        conf_gen = ConflictGenerator(env_path=env_path, worldview=final_worldview, characters=final_characters)
         conf_result = conf_gen.run()
 
         # 保存
@@ -112,7 +110,6 @@ if __name__ == "__main__":
         worldview=final_worldview,
         characters=final_characters,
         conflicts=final_conflicts,
-        seed=seed,
     )
     index = pipeline.run()
 
